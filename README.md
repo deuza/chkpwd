@@ -216,19 +216,19 @@ This tool uses multiple analyzers to provide a holistic view of password/passphr
 
 | Main interface                                      | test passwd 128 chars                                      | 128 Test1                                      |
 | :-------------------------------------------------: | :-------------------------------------------------: | :--------------------------------------------: |
-| ![Main interface](https://github.com/deuza/chkpwd/blob/main/images/01.png)        | ![test 128 chars](https://github.com/deuza/chkpwd/blob/main/images/128_0.png)        | ![Test1](https://github.com/deuza/chkpwd/blob/main/images/128_1.png))            |
+| ![Main interface](https://github.com/deuza/chkpwd/releases/download/v0.1.0/01.png)        | ![test 128 characters](https://github.com/deuza/chkpwd/releases/download/v0.1.0/admin0.png)  | ![Test1](https://github.com/deuza/chkpwd/releases/download/v0.1.0/128_1.png)            |
 | 128 Zxcvbn                                          | 128 Zxcvbn                                          | 128 OWASP                                      |
-| ![zxcvbn](https://github.com/deuza/chkpwd/blob/main/images/128_2.png)                | ![zxcvbn](https://github.com/deuza/chkpwd/blob/main/images/128_3.png)                | ![OWASP](https://github.com/deuza/chkpwd/blob/main/images/128_3.png)            |
+| ![zxcvbn](https://github.com/deuza/chkpwd/releases/download/v0.1.0/128_1.png)                | ![zxcvbn](https://github.com/deuza/chkpwd/releases/download/v0.1.0/128_2.png)                | ![OWASP](https://github.com/deuza/chkpwd/releases/download/v0.1.0/128_3.png)            |
 | 128 TAI                                             | 128 Entropy                                         | 128 HIBP                                       |
-| ![TAI](https://github.com/deuza/chkpwd/blob/main/images/128_4.png)                   | ![Entropy](https://github.com/deuza/chkpwd/blob/main/images/128_5.png)               | ![HIBP](https://github.com/deuza/chkpwd/blob/main/images/128_6.png)      |
+| ![TAI](https://github.com/deuza/chkpwd/releases/download/v0.1.0/128_4.png)                   | ![Entropy](https://github.com/deuza/chkpwd/releases/download/v0.1.0/128_5.png)            | ![HIBP](https://github.com/deuza/chkpwd/releases/download/v0.1.0/128_6.png)      |
 | 128 HIBP                                            | test passwd : admin                                          | admin Test1                                    |
-| ![HIBP](https://github.com/deuza/chkpwd/blob/main/images/128_7.png)                  | ![test admin](https://github.com/deuza/chkpwd/blob/main/images/admin0.png)            | ![Test1](https://github.com/deuza/chkpwd/blob/main/images/admin1.png)            |
+| ![HIBP](https://github.com/deuza/chkpwd/releases/download/v0.1.0/128_7.png)                  | ![test admin](https://github.com/deuza/chkpwd/releases/download/v0.1.0/admin0.png)            | ![Test1](https://github.com/deuza/chkpwd/releases/download/v0.1.0/admin1.png)            |
 | admin Zxcvbn                                        | admin Zxcvbn                                        | admin OWASP                                    |
-| ![zxcvbn](https://github.com/deuza/chkpwd/blob/main/images/admin2.png)                | ![zxcvbn](https://github.com/deuza/chkpwd/blob/main/images/admin3.png)                | ![OWASP](https://github.com/deuza/chkpwd/blob/main/images/admin4.png)            |
+| ![zxcvbn](https://github.com/deuza/chkpwd/releases/download/v0.1.0/admin2.png)                | ![zxcvbn](https://github.com/deuza/chkpwd/releases/download/v0.1.0/admin3.png)                | ![OWASP](https://github.com/deuza/chkpwd/releases/download/v0.1.0/admin4.png)            |
 | admin TAI                                           | admin Entropy                                       | admin HIBP                                     |
-| ![TAI](https://github.com/deuza/chkpwd/blob/main/images/admin5.png)                   | ![Entropy](https://github.com/deuza/chkpwd/blob/main/images/admin6.png)               | ![HIBP](https://github.com/deuza/chkpwd/blob/main/images/admin7.png)             |
+| ![TAI](https://github.com/deuza/chkpwd/releases/download/v0.1.0/admin5.png)                   | ![Entropy](https://github.com/deuza/chkpwd/releases/download/v0.1.0/admin6.png)               | ![HIBP](https://github.com/deuza/chkpwd/releases/download/v0.1.0/admin7.png)             |
 | admin Execution debug                               | 128 Execution debug                                 | HIB Error HTTP                                 |
-| ![Debug](https://github.com/deuza/chkpwd/blob/main/images/debug.png)                 | ![Debug](https://github.com/deuza/chkpwd/blob/main/images/debug2.png)                 | ![HIBP HTTP ERROR](https://github.com/deuza/chkpwd/blob/main/images/http.png)  |
+| ![Debug](https://github.com/deuza/chkpwd/releases/download/v0.1.0/debug.png)                 | ![Debug](https://github.com/deuza/chkpwd/releases/download/v0.1.0/debug2.png)                 | ![HIBP HTTP ERROR](https://github.com/deuza/chkpwd/releases/download/v0.1.0/http.png)  |
 
 
 ## 6. Limitations and Known Behaviors
