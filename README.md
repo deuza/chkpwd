@@ -1,3 +1,10 @@
+![GitHub release](https://img.shields.io/github/v/release/DeuZa/chkpwd?label=release&style=plastic)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/t/deuza/chkpwd)
+[![GitHub last commit](https://img.shields.io/github/last-commit/DeuZa/chkpwd?style=plastic)](https://github.com/DeuZa/WMT/commits/main)
+[![License: CC0](https://img.shields.io/badge/license-CC0_1.0-lightgrey.svg?style=plastic)](https://creativecommons.org/publicdomain/zero/1.0/)
+![Hack The Planet](https://img.shields.io/badge/hack-the--planet-black?style=flat-square\&logo=gnu\&logoColor=white)
+![Built With Love](https://img.shields.io/badge/built%20with-%E2%9D%A4%20by%20DeuZa-red?style=plastic)  
+
 # chkpwd
 
 ## 1. Project Purpose
@@ -234,3 +241,7 @@ This tool uses multiple analyzers to provide a holistic view of password/passphr
 
 ---
 *This tool is provided for educational and informational purposes. Always follow comprehensive security best practices.*
+<p align="center">
+  <sub><sup>With ❤️ by <a href="https://github.com/deuza">DeuZa</a></sup></sub>
+</p>
+
