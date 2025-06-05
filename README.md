@@ -78,8 +78,9 @@ Ensure your server (e.g., Debian/Ubuntu based) has the following installed:
     ```bash
     composer install
     ```
-    This will create a `vendor/` directory.
-    Alternatively, download the files (index.php, PasswordHelper.php, analyze_tai.js, composer.json, package.json) and place them in the directory.
+
+    This will create a `vendor/` directory.   
+    Alternatively, download the files (index.php, PasswordHelper.php, analyze_tai.js, composer.json, package.json) and place them in the directory.   
 
 3.  **Install Node.js Dependencies (npm):**
     The project uses several Node.js packages for analysis. Install them by running:
@@ -244,4 +245,3 @@ This tool uses multiple analyzers to provide a holistic view of password/passphr
 <p align="center">
   <sub><sup>With ❤️ by <a href="https://github.com/deuza">DeuZa</a></sup></sub>
 </p>
-
