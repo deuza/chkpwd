@@ -44,12 +44,12 @@ Ensure your server (e.g., Debian/Ubuntu based) has the following installed:
 ### Project Setup & Dependencies
 
 1.  **Clone or Download Project Files:**
-    Clone this repository to your web server directory (e.g., `/var/www/html/password-analyzer`):
+    Clone this repository to your web server directory (e.g., `/var/www/html/`):
     ```bash
-    git clone [https://example.com/yourusername/password-analyzer.git](https://example.com/yourusername/password-analyzer.git)
-    cd password-analyzer
+    git clone https://github.com/deuza/chkpwd.git
+    cd chkpwd
     ```
-    (Replace the URL with your actual repository URL if you host it.)
+    
     Alternatively, download the files (`index.php`, `PasswordHelper.php`, `analyze_tai.js`, `composer.json`) and place them in the directory.
 
 2.  **Install PHP Dependencies (Composer):**
@@ -193,7 +193,37 @@ This tool uses multiple analyzers to provide a holistic view of password/passphr
 * **Source Links:**
     * Have I Been Pwned - Pwned Passwords: [https://haveibeenpwned.com/Passwords](https://haveibeenpwned.com/Passwords)
 
-## 5. Limitations and Known Behaviors
+### g. Others interesting sources
+
+* xkcd (https://www.xkcd.com/936/)
+* xkcd analysis #1 (https://www.reddit.com/r/xkcd/comments/8vb9x3/is_password_strength_still_legit/)
+* xkcd analysis #2 (https://www.reddit.com/r/technology/comments/2j7jvr/password_security_why_xkcds_horse_battery_staple/)
+* Analysis password tools (https://rumkin.com/tools/password/)
+* EFF dices (https://www.eff.org/dices)
+* Guide auto-défense numérique (https://guide.boum.org/)
+
+
+## 5. Screenshots
+
+
+| Main interface                                      | test 128 chars                                      | 128 Test1                                      |
+| :-------------------------------------------------: | :-------------------------------------------------: | :--------------------------------------------: |
+| ![Main interface](https://imgur.com/ndQxTwY)        | ![test 128 chars](https://imgur.com/HMFKYSx)        | ![Test1](https://imgur.com/jUhOanF)            |
+| 128 Zxcvbn                                          | 128 Zxcvbn                                          | 128 OWASP                                      |
+| ![zxcvbn](https://imgur.com/d8OQYrZ)                | ![zxcvbn](https://imgur.com/Bf7gR1r)                | ![OWASP](https://imgur.com/CDEY8n2)            |
+| 128 TAI                                             | 128 Entropy                                         | 128 HIBP                                       |
+| ![TAI](https://imgur.com/OtuZnIE)                   | ![Entropy](https://imgur.com/LjLkPFi)               | ![HIBP](https://github.com/deuza/a03.png)      |
+| 128 HIBP                                            | test admin                                          | admin Test1                                    |
+| ![HIBP](https://imgur.com/F3BJq9X)                  | ![test admin](https://imgur.com/WH4FB1G)            | ![Test1](https://imgur.com/nVyS7KV)            |
+| admin Zxcvbn                                        | admin Zxcvbn                                        | admin OWASP                                    |
+| ![zxcvbn](https://imgur.com/wdCBmEc)                | ![zxcvbn](https://imgur.com/4IjeKc7)                | ![OWASP](https://imgur.com/fYp7Wsy)            |
+| admin TAI                                           | admin Entropy                                       | admin HIBP                                     |
+| ![TAI](https://imgur.com/0ipIseX)                   | ![Entropy](https://imgur.com/7eCNylB)               | ![HIBP](https://imgur.com/JEgirN0)             |
+| admin Execution debug                               | 128 Execution debug                                 | HIB Error HTTP                                 |
+| ![Debug](https://imgur.com/vTw5mJE)                 | ![Debug](https://imgur.com/O5UMxiU)                 | ![HIBP HTTP ERROR](https://imgur.com/Bdl3h33)  |
+
+
+## 6. Limitations and Known Behaviors
 
 * **TAI `trigraphEntropyBits: null`:** The TAI library consistently returns `null` for this metric in our tests.
 * **TAI Password Normalization:** TAI preprocesses passwords (e.g., removes spaces, may truncate very long or complex strings), which can affect its analysis length and results compared to the raw input.
