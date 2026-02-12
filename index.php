@@ -20,12 +20,12 @@ $show_results_view = false; // Controls whether to display the input forms or th
 
 // --- Generation Options Initialization ---
 // Password Generation Options
-$length = $_POST['length'] ?? 16; // Default length for random passwords.
+$length = $_POST['length'] ?? 64; // Default length for random passwords.
 // Validate and sanitize password length.
 if (ctype_digit((string)$length) && (int)$length >= 10 && (int)$length <= 128) {
     $length = (int)$length;
 } else {
-    $length = 16; // Fallback to default if validation fails.
+    $length = 64; // Fallback to default if validation fails.
 }
 
 // Passphrase Generation Options
@@ -55,6 +55,11 @@ $action_is_generate_passphrase = ($is_post_request && isset($_POST['action']) &&
 $passphrase_capitalize = ($is_post_request && $action_is_generate_passphrase) ? isset($_POST['passphrase_capitalize_cb']) : true;
 $passphrase_add_number = ($is_post_request && $action_is_generate_passphrase) ? isset($_POST['passphrase_add_number_cb']) : true;
 $passphrase_add_symbol = ($is_post_request && $action_is_generate_passphrase) ? isset($_POST['passphrase_add_symbol_cb']) : true;
+
+// Unicode character enhancement options (default: checked/true).
+$action_is_generate_random = ($is_post_request && isset($_POST['action']) && $_POST['action'] === 'generate_random');
+$random_add_unicode = ($is_post_request && $action_is_generate_random) ? isset($_POST['random_add_unicode_cb']) : true;
+$passphrase_add_unicode = ($is_post_request && $action_is_generate_passphrase) ? isset($_POST['passphrase_add_unicode_cb']) : true;
 // --- End Generation Options Initialization ---
 
 // Get the action from the POST request, if any.
@@ -66,16 +71,16 @@ $errorMessage = null;
 if ($is_post_request && $action) {
     if ($action === 'generate_random') {
         // Process random password generation.
-        $length_val = filter_var($length, FILTER_VALIDATE_INT, ['options' => ['min_range' => 10, 'max_range' => 128, 'default' => 16]]);
+        $length_val = filter_var($length, FILTER_VALIDATE_INT, ['options' => ['min_range' => 10, 'max_range' => 128, 'default' => 64]]);
         if ($length_val === false) {
-            $length = 16; // Default length if invalid.
-            $errorMessage = "Invalid length for password generation, using default (16).";
+            $length = 64; // Default length if invalid.
+            $errorMessage = "Invalid length for password generation, using default (64).";
         } else {
             $length = $length_val;
         }
         try {
             if (!$errorMessage) {
-                $password_to_analyze = PasswordHelper::generatePassword($length);
+                $password_to_analyze = PasswordHelper::generatePassword($length, true, true, true, true, $random_add_unicode);
                 $generated_password_type = 'Random Password';
             }
         } catch (Exception $e) {
@@ -100,7 +105,8 @@ if ($is_post_request && $action) {
                     8, // maxWordLength (hardcoded for now, could be a form option)
                     $passphrase_capitalize,
                     $passphrase_add_number,
-                    $passphrase_add_symbol
+                    $passphrase_add_symbol,
+                    $passphrase_add_unicode
                 );
                 $generated_password_type = 'Passphrase';
             }
@@ -173,9 +179,9 @@ function getStrengthVisuals(string $analyzer, ?array $analysisData): array {
             $rulesPassed = $analysisData['owasp']['rules_passed'] ?? 0;
             $isStrongByOwaspCriteria = $analysisData['owasp']['is_strong'] ?? false;
             if (!$isStrongByOwaspCriteria || $rulesPassed < 3) { $level = 0; $levelText = "Non-Compliant"; $recommendation = "Avoid (Fails basic policy)"; }
-            elseif ($rulesPassed === 3 && $isStrongByOwaspCriteria) { $level = 1; $levelText = "Passable"; $recommendation = "Passable, consider improving (Basic policy)"; }
-            elseif ($rulesPassed === 4 && $isStrongByOwaspCriteria) { $level = 2; $levelText = "Good"; $recommendation = "Good (Meets most basic criteria)"; }
-            elseif ($rulesPassed === 5 && $isStrongByOwaspCriteria) { $level = 3; $levelText = "Excellent"; $recommendation = "Excellent (Meets all basic criteria)"; }
+            elseif ($rulesPassed <= 3 && $isStrongByOwaspCriteria) { $level = 1; $levelText = "Passable"; $recommendation = "Passable, consider improving (Basic policy)"; }
+            elseif ($rulesPassed <= 4 && $isStrongByOwaspCriteria) { $level = 2; $levelText = "Good"; $recommendation = "Good (Meets most basic criteria)"; }
+            elseif ($rulesPassed >= 5 && $isStrongByOwaspCriteria) { $level = 3; $levelText = "Excellent"; $recommendation = "Excellent (Meets all basic criteria)"; }
             else { $level = 0; $levelText = "Non-Compliant"; $recommendation = "Avoid (Basic policy criteria unclear or not met)";}
         } 
         // Logic for TAI (Tests Always Included) analyzer.
@@ -413,6 +419,15 @@ function displayFullArray(array $data, string $title, bool $isTai = false, bool 
                         <label for="length">Length (10-128):</label>
                         <input type="number" id="length" name="length" value="<?php echo htmlspecialchars((string)$length); ?>" min="10" max="128">
                     </div>
+                    <div class="options-group">
+                        <div>
+                            <input type="checkbox" id="random_add_unicode_cb" name="random_add_unicode_cb" value="1" <?php if ($random_add_unicode) echo 'checked'; ?>>
+                            <label for="random_add_unicode_cb">Include a Unicode character</label>
+                            <small style="display:block; margin-left:22px; color:var(--text-muted); font-size:0.8em;" title="<?php echo htmlspecialchars(implode(' ', array_keys(PasswordHelper::UNICODE_CHARS))); ?>">
+                                (<?php echo htmlspecialchars(implode(' ', array_keys(PasswordHelper::UNICODE_CHARS))); ?>)
+                            </small>
+                        </div>
+                    </div>
                     <input type="hidden" name="gen_type" value="random_password">
                     <input type="submit" name="action" value="generate_random" title="Generate and Analyze Random Password">
                 </form>
@@ -442,6 +457,13 @@ function displayFullArray(array $data, string $title, bool $isTai = false, bool 
                         <div>
                             <input type="checkbox" id="passphrase_add_symbol_cb" name="passphrase_add_symbol_cb" value="1" <?php if ($passphrase_add_symbol) echo 'checked'; ?>>
                             <label for="passphrase_add_symbol_cb">Add a random symbol at the end</label>
+                        </div>
+                        <div>
+                            <input type="checkbox" id="passphrase_add_unicode_cb" name="passphrase_add_unicode_cb" value="1" <?php if ($passphrase_add_unicode) echo 'checked'; ?>>
+                            <label for="passphrase_add_unicode_cb">Add a Unicode character at the end</label>
+                            <small style="display:block; margin-left:22px; color:var(--text-muted); font-size:0.8em;" title="<?php echo htmlspecialchars(implode(' ', array_keys(PasswordHelper::UNICODE_CHARS))); ?>">
+                                (<?php echo htmlspecialchars(implode(' ', array_keys(PasswordHelper::UNICODE_CHARS))); ?>)
+                            </small>
                         </div>
                     </div>
                     <div style="margin-top:10px; font-size:0.8em;">
@@ -517,6 +539,7 @@ function displayFullArray(array $data, string $title, bool $isTai = false, bool 
                                     'Uppercase' => $owaspPhpData['has_uppercase'] ?? false,
                                     'Numbers' => $owaspPhpData['has_number'] ?? false,
                                     'Symbols (our set)' => $owaspPhpData['has_symbol'] ?? false,
+                                    'Unicode' => $owaspPhpData['has_unicode'] ?? false,
                                 ];
                                 foreach ($charChecks as $label => $present) {
                                     echo '<span class="char-type ' . ($present ? 'char-present' : 'char-absent') . '">' . htmlspecialchars($label) . '</span> ';
@@ -525,7 +548,7 @@ function displayFullArray(array $data, string $title, bool $isTai = false, bool 
                             </td>
                         </tr>
                         <tr><th>Theoretical Entropy</th><td><?php echo htmlspecialchars((string)($analysis['shannon_theoretical_entropy'] ?? 'N/A')); ?> bits (based on alphabet of <?php echo htmlspecialchars((string)($analysis['alphabet_size_for_theoretical_entropy'] ?? 'N/A'));?> characters)</td></tr>
-                        <tr><th>Basic Policy Compliance</th><td><?php echo ($owaspPhpData['is_strong'] ?? false) ? '<span style="color:var(--color-success);font-weight:bold;">Compliant</span>' : '<span style="color:var(--color-danger);font-weight:bold;">Non-Compliant</span>'; ?> (<?php echo htmlspecialchars((string)($owaspPhpData['rules_passed'] ?? 'N/A')); ?> / 5 rules)</td></tr>
+                        <tr><th>Basic Policy Compliance</th><td><?php echo ($owaspPhpData['is_strong'] ?? false) ? '<span style="color:var(--color-success);font-weight:bold;">Compliant</span>' : '<span style="color:var(--color-danger);font-weight:bold;">Non-Compliant</span>'; ?> (<?php echo htmlspecialchars((string)($owaspPhpData['rules_passed'] ?? 'N/A')); ?> / 6 rules)</td></tr>
                         <tr><th>Basic Policy Message</th><td><?php echo htmlspecialchars($owaspPhpData['compliance_message'] ?? 'N/A'); ?></td></tr>
                     </table>
                     <?php if (isset($analysis['warning_strlen_fallback'])): ?>

@@ -10,7 +10,25 @@ class PasswordHelper {
     private const DEFAULT_SYMBOLS = '!@#$%^&*()_+-=[]{}|;:,.<>/?~';
     public const DEFAULT_DICTIONARY = '/usr/share/dict/words';
 
-    public static function generatePassword(int $length, bool $useLowercase = true, bool $useUppercase = true, bool $useNumbers = true, bool $useSymbols = true): string {
+    /** Common Unicode characters for password hardening. */
+    public const UNICODE_CHARS = [
+        'é' => 'é (e acute)',
+        'è' => 'è (e grave)',
+        'à' => 'à (a grave)',
+        'ù' => 'ù (u grave)',
+        'ç' => 'ç (c cedilla)',
+        'ñ' => 'ñ (n tilde)',
+        'ö' => 'ö (o umlaut)',
+        'ü' => 'ü (u umlaut)',
+        '€' => '€ (euro sign)',
+        '£' => '£ (pound sign)',
+        '¥' => '¥ (yen sign)',
+        'µ' => 'µ (micro sign)',
+        'ø' => 'ø (o stroke)',
+        'æ' => 'æ (ae ligature)',
+    ];
+
+    public static function generatePassword(int $length, bool $useLowercase = true, bool $useUppercase = true, bool $useNumbers = true, bool $useSymbols = true, bool $addUnicode = true): string {
         if ($length < 1) {
             throw new InvalidArgumentException("Password length must be at least 1.");
         }
@@ -21,9 +39,22 @@ class PasswordHelper {
         if ($useUppercase) { $charset .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; $passwordParts[] = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[random_int(0, 25)]; $charTypesSelected++; }
         if ($useNumbers) { $charset .= '0123456789'; $passwordParts[] = '0123456789'[random_int(0, 9)]; $charTypesSelected++; }
         if ($useSymbols) { $charset .= self::DEFAULT_SYMBOLS; $passwordParts[] = self::DEFAULT_SYMBOLS[random_int(0, strlen(self::DEFAULT_SYMBOLS) - 1)]; $charTypesSelected++; }
-        if (empty($charset)) {
+
+        // Guarantee one random Unicode character if requested.
+        if ($addUnicode) {
+            $unicodeKeys = array_keys(self::UNICODE_CHARS);
+            $passwordParts[] = $unicodeKeys[random_int(0, count($unicodeKeys) - 1)];
+            $charTypesSelected++;
+        }
+
+        if (empty($charset) && !$addUnicode) {
             throw new InvalidArgumentException("At least one character type must be selected for password generation.");
         }
+        // Ensure we have a charset for fill characters even if only unicode was selected.
+        if (empty($charset)) {
+            $charset = 'abcdefghijklmnopqrstuvwxyz';
+        }
+
         if ($length < $charTypesSelected) {
             $passwordParts = array_slice($passwordParts, 0, $length);
             $remainingLength = 0;
@@ -45,7 +76,8 @@ class PasswordHelper {
         int $maxWordLength = 8,
         bool $capitalizeWords = true,
         bool $addNumber = true,
-        bool $addSymbol = true
+        bool $addSymbol = true,
+        bool $addUnicode = true
     ): string {
         if ($wordCount < 1) {
             throw new InvalidArgumentException("Word count must be at least 1.");
@@ -122,6 +154,11 @@ class PasswordHelper {
             $finalPassphrase .= self::DEFAULT_SYMBOLS[$symbolIndex];
         }
 
+        if ($addUnicode) {
+            $unicodeKeys = array_keys(self::UNICODE_CHARS);
+            $finalPassphrase .= $unicodeKeys[random_int(0, count($unicodeKeys) - 1)];
+        }
+
         return $finalPassphrase;
     }
 
@@ -140,11 +177,13 @@ class PasswordHelper {
             'has_uppercase' => (bool) preg_match('/[A-Z]/u', $password),
             'has_number' => (bool) preg_match('/[0-9]/', $password),
             'has_symbol' => (bool) preg_match('/[' . preg_quote(self::DEFAULT_SYMBOLS, '/') . ']/', $password),
+            'has_unicode' => (bool) preg_match('/[^\x00-\x7F]/u', $password),
             'is_strong' => false
         ];
         $analysis['owasp_char_types_detected'] = [
             'lowercase_detected' => $owasp['has_lowercase'], 'uppercase_detected' => $owasp['has_uppercase'],
-            'number_detected' => $owasp['has_number'], 'symbol_from_set_detected' => $owasp['has_symbol']
+            'number_detected' => $owasp['has_number'], 'symbol_from_set_detected' => $owasp['has_symbol'],
+            'unicode_detected' => $owasp['has_unicode']
         ];
         $owasp['rules_passed'] = 0;
         if ($owasp['length'] >= 10) $owasp['rules_passed']++;
@@ -152,7 +191,8 @@ class PasswordHelper {
         if ($owasp['has_uppercase']) $owasp['rules_passed']++;
         if ($owasp['has_number']) $owasp['rules_passed']++;
         if ($owasp['has_symbol']) $owasp['rules_passed']++;
-        $diversityScore = ($owasp['has_lowercase'] ? 1:0) + ($owasp['has_uppercase'] ? 1:0) + ($owasp['has_number'] ? 1:0) + ($owasp['has_symbol'] ? 1:0);
+        if ($owasp['has_unicode']) $owasp['rules_passed']++;
+        $diversityScore = ($owasp['has_lowercase'] ? 1:0) + ($owasp['has_uppercase'] ? 1:0) + ($owasp['has_number'] ? 1:0) + ($owasp['has_symbol'] ? 1:0) + ($owasp['has_unicode'] ? 1:0);
         if ($owasp['length'] >= 10 && $diversityScore >= 3) {
             $owasp['is_strong'] = true;
             $owasp['compliance_message'] = "Passes basic OWASP-like policy.";
@@ -166,8 +206,15 @@ class PasswordHelper {
         if ($owasp['has_uppercase']) $baseAlphabetForEntropyString .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         if ($owasp['has_number']) $baseAlphabetForEntropyString .= '0123456789';
         if ($owasp['has_symbol']) $baseAlphabetForEntropyString .= self::DEFAULT_SYMBOLS;
-        $strlenOfBaseAlphabet = function_exists('mb_strlen') ? mb_strlen($baseAlphabetForEntropyString, '8bit') : strlen($baseAlphabetForEntropyString);
-        $baseAlphabetArray = str_split($baseAlphabetForEntropyString);
+        // Add Unicode chars to the theoretical alphabet (conservative estimate: our known set).
+        if ($owasp['has_unicode']) $baseAlphabetForEntropyString .= implode('', array_keys(self::UNICODE_CHARS));
+        $strlenOfBaseAlphabet = function_exists('mb_strlen') ? mb_strlen($baseAlphabetForEntropyString, 'UTF-8') : strlen($baseAlphabetForEntropyString);
+        // Use mb_str_split or preg_split for proper UTF-8 character splitting.
+        if (function_exists('mb_str_split')) {
+            $baseAlphabetArray = mb_str_split($baseAlphabetForEntropyString, 1, 'UTF-8');
+        } else {
+            $baseAlphabetArray = preg_split('//u', $baseAlphabetForEntropyString, -1, PREG_SPLIT_NO_EMPTY);
+        }
         $uniqueAlphabetChars = array_unique($baseAlphabetArray);
         $alphabetSize = count($uniqueAlphabetChars);
         $analysis['debug_alphabet_calculation_details'] = [
