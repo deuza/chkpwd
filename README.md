@@ -1,6 +1,6 @@
 ![GitHub release](https://img.shields.io/github/v/release/deuza/chkpwd?label=release&style=plastic)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/t/deuza/chkpwd)
-[![GitHub last commit](https://img.shields.io/github/last-commit/DeuZa/chkpwd?style=plastic)](https://github.com/DeuZa/WMT/commits/main)
+[![GitHub last commit](https://img.shields.io/github/last-commit/DeuZa/chkpwd?style=plastic)](https://github.com/DeuZa/chkpwd/commits/main)
 [![License: CC0](https://img.shields.io/badge/license-CC0_1.0-lightgrey.svg?style=plastic)](https://creativecommons.org/publicdomain/zero/1.0/)
 ![Hack The Planet](https://img.shields.io/badge/hack-the--planet-black?style=flat-square\&logo=gnu\&logoColor=white)
 ![Built With Love](https://img.shields.io/badge/built%20with-%E2%9D%A4%20by%20DeuZa-red?style=plastic)  
@@ -12,7 +12,8 @@
 This project is a PHP-based web tool designed for administrators and security-conscious users to:
 
 * Generate strong random passwords of a user-specified length.
-* Generate passphrases from dictionary words, with options for capitalization, and appending numbers or symbols.
+* Generate passphrases from dictionary words, with options for capitalization, and appending numbers, symbols, or Unicode characters.
+* Optionally inject common Unicode characters (é, è, à, €, £, etc.) into generated passwords and passphrases to increase character space diversity and harden against ASCII-only brute-force attacks.
 * Analyze the strength of generated or user-inputted passwords/passphrases using a variety of metrics and analysis engines.
 * Provide detailed feedback, including strength scores, estimated crack times (from Zxcvbn), character set composition, compliance with basic policies, and checks against known data breaches (Have I Been Pwned).
 * Enhance password security awareness and promote better password practices by offering multiple perspectives on password strength.
@@ -88,6 +89,13 @@ Ensure your server (e.g., Debian/Ubuntu based) has the following installed:
     npm install
     ```
 
+    This will create a `node_modules/` directory and a `package-lock.json` file.
+
+3.  **Install Node.js Dependencies (npm):**
+    The project uses several Node.js packages for analysis, listed in `package.json`. Install them by running:
+    ```bash
+    npm install
+    ```
     This will create a `node_modules/` directory and a `package-lock.json` file (if not already present and up-to-date). If you encounter issues, ensure your Node.js and npm versions are up-to-date and that you have the necessary permissions. (npm install tai-password-strength owasp-password-strength-test fast-password-entropy string-entropy)
 
 ### Configuration Notes
@@ -103,12 +111,13 @@ Ensure your server (e.g., Debian/Ubuntu based) has the following installed:
     * The main user interface (frontend). Handles user input for password/passphrase generation or direct analysis. Displays the generated credential and all detailed analysis results, including strength bars and recommendations. Contains HTML, CSS, and PHP presentation logic, plus client-side JavaScript for HIBP check and copy-to-clipboard functionality.
 * **`PasswordHelper.php`:**
     * A PHP class containing the core backend logic.
-        * `generatePassword()`: Securely generates random passwords based on length.
-        * `generatePassphrase()`: Generates passphrases from a dictionary file with options for word count, separator, capitalization, and appending a number or ASCII symbol.
+        * `UNICODE_CHARS`: A constant array of 14 common Unicode characters (é, è, à, ù, ç, ñ, ö, ü, €, £, ¥, µ, ø, æ) available for password hardening.
+        * `generatePassword()`: Securely generates random passwords based on length, with an option to include a random Unicode character from the predefined set.
+        * `generatePassphrase()`: Generates passphrases from a dictionary file with options for word count, separator, capitalization, and appending a number, ASCII symbol, or Unicode character.
         * `analyzePassword()`: Orchestrates the password/passphrase analysis by:
             * Calling `zxcvbn-php`.
-            * Performing internal "Basic Policy" checks (length, character type diversity based on ASCII sets).
-            * Calculating "Theoretical Shannon Entropy" based on detected ASCII character types and character length (using `mb_strlen`).
+            * Performing internal "Basic Policy" checks (length, character type diversity based on ASCII sets and Unicode detection).
+            * Calculating "Theoretical Shannon Entropy" based on detected character types (including Unicode) and character length (using `mb_strlen`).
             * Executing `analyze_tai.js` via `shell_exec` to get results from TAI, OWASP-npm, fast-entropy, and string-entropy.
             * Aggregating all results.
 * **`analyze_tai.js`:**
@@ -134,11 +143,11 @@ This tool uses multiple analyzers to provide a holistic view of password/passphr
 * **Interest/Purpose:** This section provides fundamental details about the password and checks it against a basic, customizable policy inspired by common security recommendations (e.g., from OWASP, NIST). It gives a quick first assessment of hygiene.
 * **How it Works:**
     * **Length:** Calculated using `mb_strlen` for correct UTF-8 character counting.
-    * **Character Types Present:** Detects lowercase, uppercase, numbers, and symbols (from a predefined 28-symbol ASCII set: `!@#$%^&*()_+-=[]{}|;:,.<>/?~`).
+    * **Character Types Present:** Detects lowercase, uppercase, numbers, symbols (from a predefined 28-symbol ASCII set: `!@#$%^&*()_+-=[]{}|;:,.<>/?~`), and Unicode characters (any non-ASCII character).
     * **Theoretical Shannon Entropy:** Calculated as $L \times \log_2(N)$.
         * $L$ is the character length of the password.
-        * $N$ is the size of the effective alphabet based *only* on the detected presence of the four ASCII character types mentioned above (e.g., if all four are present, $N = 26+26+10+28 = 90$). This entropy measures the password's strength *if it were randomly generated solely from these combined ASCII sets*. It does not dynamically include other Unicode characters from the password in *this specific* calculation.
-    * **Basic Policy Compliance:** Checks if length >= 10 AND at least 3 of the 4 ASCII character types (lowercase, uppercase, numbers, symbols) are present.
+        * $N$ is the size of the effective alphabet based on the detected presence of the five character types mentioned above (e.g., if all five are present including Unicode, $N = 26+26+10+28+14 = 104$ where 14 is the size of the predefined Unicode character set).
+    * **Basic Policy Compliance:** Checks if length >= 10 AND at least 3 of the 5 character types (lowercase, uppercase, numbers, symbols, Unicode) are present.
 * **Recommendation:** Based on whether the basic policy is met.
 * **Source Links:**
     * OWASP Password Guidelines: [Password Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html), [Authentication Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html)
@@ -209,7 +218,7 @@ This tool uses multiple analyzers to provide a holistic view of password/passphr
 
 | Main interface                                      | test passwd 128 chars                                      | 128 Test1                                      |
 | :-------------------------------------------------: | :-------------------------------------------------: | :--------------------------------------------: |
-| ![Main interface](https://github.com/deuza/chkpwd/blob/main/images/01.png)        | ![test 128 chars](https://github.com/deuza/chkpwd/blob/main/images/128_0.png)        | ![Test1](https://github.com/deuza/chkpwd/blob/main/images/128_1.png))            |
+| ![Main interface](https://github.com/deuza/chkpwd/blob/main/images/01.png)        | ![test 128 chars](https://github.com/deuza/chkpwd/blob/main/images/128_0.png)        | ![Test1](https://github.com/deuza/chkpwd/blob/main/images/128_1.png)            |
 | 128 Zxcvbn                                          | 128 Zxcvbn                                          | 128 OWASP                                      |
 | ![zxcvbn](https://github.com/deuza/chkpwd/blob/main/images/128_2.png)                | ![zxcvbn](https://github.com/deuza/chkpwd/blob/main/images/128_3.png)                | ![OWASP](https://github.com/deuza/chkpwd/blob/main/images/128_3.png)            |
 | 128 TAI                                             | 128 Entropy                                         | 128 HIBP                                       |
@@ -228,7 +237,7 @@ This tool uses multiple analyzers to provide a holistic view of password/passphr
 
 * **TAI `trigraphEntropyBits: null`:** The TAI library consistently returns `null` for this metric in our tests.
 * **TAI Password Normalization:** TAI preprocesses passwords (e.g., removes spaces, may truncate very long or complex strings), which can affect its analysis length and results compared to the raw input.
-* **Theoretical Entropy (PHP):** This calculation is based on the password's character length and an alphabet size derived *only* from detected characters within predefined ASCII sets (lowercase, uppercase, numbers, and the 28 `DEFAULT_SYMBOLS`). It does *not* dynamically expand its reference alphabet for other Unicode characters present in the input password for *this specific "Theoretical Entropy"* value (though TAI and other Node.js entropy tools will consider them). When all four basic ASCII types are present, the alphabet size used is 90.
+* **Theoretical Entropy (PHP):** This calculation is based on the password's character length and an alphabet size derived from detected character types: the four ASCII sets (lowercase, uppercase, numbers, and the 28 `DEFAULT_SYMBOLS`) plus the 14 predefined Unicode characters when non-ASCII characters are detected. When all five types are present, the alphabet size used is 104.
 * **Node.js Dependency:** Several key analyses (`TAI`, `OWASP npm`, additional entropies) rely on Node.js and `shell_exec`.
 * **Dictionary Path for Passphrases:** Passphrase generation defaults to `/usr/share/dict/words`. Its availability and content can vary between systems. The UI currently shows this path but does not allow user modification for security reasons (to prevent path traversal attacks without robust server-side validation).
 * **Internet Connection for HIBP:** The HIBP check is performed client-side and requires an internet connection to reach the HIBP API. It also requires a secure context (HTTPS or localhost) for browser crypto features.
@@ -236,5 +245,7 @@ This tool uses multiple analyzers to provide a holistic view of password/passphr
 ---
 *This tool is provided for educational and informational purposes. Always follow comprehensive security best practices.*
 <p align="center">
-  <sub><sup>With ❤️ by <a href="https://github.com/deuza">DeuZa</a></sup></sub>
+  <sub><sup>With ❤️ by <a href="https://github.com/deuza">DeuZa</a></sup></sub><br>
+  <sub><sup>📦 <a href="https://github.com/deuza/chkpwd">https://github.com/deuza/chkpwd</a></sup></sub><br>
+  <sub><sup>📄 Licensed under <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0 1.0 Universal (Public Domain)</a></sup></sub>
 </p>
