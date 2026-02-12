@@ -920,8 +920,16 @@ OWASP Detected Char Types (PHP): <?php echo htmlspecialchars(print_r($analysis['
             }
             <?php endif; ?>
             
-            // The JavaScript for equalizing card heights has been removed as per your request.
+            // The JavaScript for equalizing card heights has been removed as per your request.d
         });
     </script>
+<p align="center" style="color: white;">
+  With ❤️ by <a href="https://github.com/deuza" style="color: white;">DeuZa</a> —
+  This programm is under licence
+  <a href="https://creativecommons.org/publicdomain/zero/1.0/" style="color: white;">CC0</a>
+  it can be downloaded here :
+  <a href="https://github.com/deuza/chkpwd" style="color: white;">github.com/deuza/chkpwd</a>
+</p>
+
 </body>
 </html>
