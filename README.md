@@ -88,13 +88,6 @@ Ensure your server (e.g., Debian/Ubuntu based) has the following installed:
     npm install
     ```
 
-    This will create a `node_modules/` directory and a `package-lock.json` file.
-
-3.  **Install Node.js Dependencies (npm):**
-    The project uses several Node.js packages for analysis, listed in `package.json`. Install them by running:
-    ```bash
-    npm install
-    ```
     This will create a `node_modules/` directory and a `package-lock.json` file (if not already present and up-to-date). If you encounter issues, ensure your Node.js and npm versions are up-to-date and that you have the necessary permissions. (npm install tai-password-strength owasp-password-strength-test fast-password-entropy string-entropy)
 
 ### Configuration Notes
