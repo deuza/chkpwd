@@ -237,8 +237,6 @@ This tool uses multiple analyzers to provide a holistic view of password/passphr
 
 ---
 *This tool is provided for educational and informational purposes. Always follow comprehensive security best practices.*
-<p align="center">
-  <sub><sup>With ❤️ by <a href="https://github.com/deuza">DeuZa</a></sup></sub><br>
-  <sub><sup>📦 <a href="https://github.com/deuza/chkpwd">https://github.com/deuza/chkpwd</a></sup></sub><br>
-  <sub><sup>📄 Licensed under <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0 1.0 Universal (Public Domain)</a></sup></sub>
-</p>
+
+---
+<p align="center">With ❤️ by <a href="https://github.com/deuza">DeuZa</a> — Programme sous licence <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0</a> disponible ici : <a href="https://github.com/deuza/chkpwd">github.com/deuza/chkpwd</a></p>
