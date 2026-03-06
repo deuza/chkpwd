@@ -214,6 +214,8 @@ This tool uses multiple analyzers to provide a holistic view of password/passphr
 
 ## 5. Screenshots
 
+Main interface :
+![Main interface](img/main.png) 
 
 | Main interface                                      | test passwd 128 chars                                      | 128 Test1                                      |
 | :-------------------------------------------------: | :-------------------------------------------------: | :--------------------------------------------: |
