@@ -211,28 +211,46 @@ This tool uses multiple analyzers to provide a holistic view of password/passphr
 * EFF dices (https://www.eff.org/dices)
 * Guide auto-défense numérique (https://guide.boum.org/)
 
-
 ## 5. Screenshots
 
-Main interface :
-![Main interface](img/main.png) 
+### Main interface
+![Main interface](img/main.png)
 
-| Main interface                                      | test passwd 128 chars                                      | 128 Test1                                      |
-| :-------------------------------------------------: | :-------------------------------------------------: | :--------------------------------------------: |
-| ![Main interface](https://github.com/deuza/chkpwd/blob/main/images/01.png)        | ![test 128 chars](https://github.com/deuza/chkpwd/blob/main/images/128_0.png)        | ![Test1](https://github.com/deuza/chkpwd/blob/main/images/128_1.png)            |
-| 128 Zxcvbn                                          | 128 Zxcvbn                                          | 128 OWASP                                      |
-| ![zxcvbn](https://github.com/deuza/chkpwd/blob/main/images/128_2.png)                | ![zxcvbn](https://github.com/deuza/chkpwd/blob/main/images/128_3.png)                | ![OWASP](https://github.com/deuza/chkpwd/blob/main/images/128_3.png)            |
-| 128 TAI                                             | 128 Entropy                                         | 128 HIBP                                       |
-| ![TAI](https://github.com/deuza/chkpwd/blob/main/images/128_4.png)                   | ![Entropy](https://github.com/deuza/chkpwd/blob/main/images/128_5.png)               | ![HIBP](https://github.com/deuza/chkpwd/blob/main/images/128_6.png)      |
-| 128 HIBP                                            | test passwd : admin                                          | admin Test1                                    |
-| ![HIBP](https://github.com/deuza/chkpwd/blob/main/images/128_7.png)                  | ![test admin](https://github.com/deuza/chkpwd/blob/main/images/admin0.png)            | ![Test1](https://github.com/deuza/chkpwd/blob/main/images/admin1.png)            |
-| admin Zxcvbn                                        | admin Zxcvbn                                        | admin OWASP                                    |
-| ![zxcvbn](https://github.com/deuza/chkpwd/blob/main/images/admin2.png)                | ![zxcvbn](https://github.com/deuza/chkpwd/blob/main/images/admin3.png)                | ![OWASP](https://github.com/deuza/chkpwd/blob/main/images/admin4.png)            |
-| admin TAI                                           | admin Entropy                                       | admin HIBP                                     |
-| ![TAI](https://github.com/deuza/chkpwd/blob/main/images/admin5.png)                   | ![Entropy](https://github.com/deuza/chkpwd/blob/main/images/admin6.png)               | ![HIBP](https://github.com/deuza/chkpwd/blob/main/images/admin7.png)             |
-| admin Execution debug                               | 128 Execution debug                                 | HIB Error HTTP                                 |
-| ![Debug](https://github.com/deuza/chkpwd/blob/main/images/debug.png)                 | ![Debug](https://github.com/deuza/chkpwd/blob/main/images/debug2.png)                 | ![HIBP HTTP ERROR](https://github.com/deuza/chkpwd/blob/main/images/http.png)  |
+---
 
+## Analysis of a very strong password (128 characters)
+
+| Step | Capture |
+| :--- | :------ |
+| Password generated | ![Password 128](img/128_0.png) |
+| PHP tests | ![PHP Test](img/128_1.png) |
+| Zxcvbn tests | ![Zxcvbn](img/128_2.png) |
+| Crack time (Zxcvbn) | ![Crack time](img/128_3.png) |
+| OWASP tests | ![OWASP](img/128_4.png) |
+| TAI results | ![TAI](img/128_5.png) |
+| Entropy (Node.js) | ![Entropie](img/128_6.png) |
+| HIBP verification | ![HIBP](img/128_7.png) |
+
+---
+
+## Analysis of a very weak and well-known password: admin
+
+| Step | Capture |
+| :--- | :------ |
+| Password analyzed | ![admin](img/admin0.png) |
+| PHP tests | ![Tests PHP](img/admin1.png) |
+| Zxcvbn test | ![Zxcvbn](img/admin2.png) |
+| Zxcvbn infos | ![Infos Zxcvbn](img/admin3.png) |
+| OWASP tests | ![OWASP](img/admin4.png) |
+| TAI results | ![TAI](img/admin5.png) |
+| Entropy (Node.js) | ![Entropie](img/admin6.png) |
+| HIBP verification | ![HIBP](img/admin7.png) |
+
+---
+
+## HIBP error (HTTP usage)
+
+![HIBP error](img/http.png)
 
 ## 6. Limitations and Known Behaviors
 
