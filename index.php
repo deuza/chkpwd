@@ -321,7 +321,7 @@ function displayFullArray(array $data, string $title, bool $isTai = false, bool 
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Advanced Password Generator & Analyzer</title>  <link rel="icon" href="favicon.ico">
+    <title>Advanced Password Generator & Analyzer</title>  <link rel="icon" href="chkpwd.ico">
     <style>
         /* CSS Styles remain unchanged from your provided version. */
         /* For brevity, I'm not repeating the full CSS block here but assume it's the same. */
