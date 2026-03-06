@@ -219,6 +219,7 @@ This tool uses multiple analyzers to provide a holistic view of password/passphr
 ---
 
 ## Analysis of a very strong password (128 characters)
+Complete result of a long random password, compliant with all tests.
 
 | Step | Capture |
 | :--- | :------ |
@@ -234,6 +235,7 @@ This tool uses multiple analyzers to provide a holistic view of password/passphr
 ---
 
 ## Analysis of a very weak and well-known password: admin
+A deliberately catastrophic example to illustrate all detectable flaws.
 
 | Step | Capture |
 | :--- | :------ |
@@ -249,6 +251,7 @@ This tool uses multiple analyzers to provide a holistic view of password/passphr
 ---
 
 ## HIBP error (HTTP usage)
+When the HIBP API is called at `http://` instead of `https://`, an error is displayed:
 
 ![HIBP error](img/http.png)
 
