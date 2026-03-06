@@ -218,13 +218,17 @@ This tool uses multiple analyzers to provide a holistic view of password/passphr
 
 ---
 
-## Analysis of a very strong password (128 characters)
+<details>
+  <summary><strong>Analysis of a very strong password (128 characters)</strong></summary>
+
 Complete result of a long random password, compliant with all tests.
+
+<br>
 
 | Step | Capture |
 | :--- | :------ |
 | Password generated | ![Password 128](img/128_0.png) |
-| PHP tests | ![PHP Test](img/128_1.png) |
+| PHP tests | ![PHP Tests](img/128_1.png) |
 | Zxcvbn tests | ![Zxcvbn](img/128_2.png) |
 | Crack time (Zxcvbn) | ![Crack time](img/128_3.png) |
 | OWASP tests | ![OWASP](img/128_4.png) |
@@ -232,21 +236,29 @@ Complete result of a long random password, compliant with all tests.
 | Entropy (Node.js) | ![Entropie](img/128_6.png) |
 | HIBP verification | ![HIBP](img/128_7.png) |
 
----
+</details>
 
-## Analysis of a very weak and well-known password: admin
-A deliberately catastrophic example to illustrate all detectable flaws.
+
+---
+<details>
+  <summary><strong>Analysis of a very weak and well-known password: admin</strong></summary>
+
+Complete result of a long random password, compliant with all tests.
+
+<br>
 
 | Step | Capture |
 | :--- | :------ |
 | Password analyzed | ![admin](img/admin0.png) |
-| PHP tests | ![Tests PHP](img/admin1.png) |
+| PHP tests | ![PHP Tests](img/admin1.png) |
 | Zxcvbn test | ![Zxcvbn](img/admin2.png) |
 | Zxcvbn infos | ![Infos Zxcvbn](img/admin3.png) |
 | OWASP tests | ![OWASP](img/admin4.png) |
 | TAI results | ![TAI](img/admin5.png) |
 | Entropy (Node.js) | ![Entropie](img/admin6.png) |
 | HIBP verification | ![HIBP](img/admin7.png) |
+
+</details>
 
 ---
 
