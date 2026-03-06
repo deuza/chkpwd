@@ -9,9 +9,9 @@
 ![Hack The Planet](https://img.shields.io/badge/hack-the--planet-black?style=flat-square\&logo=gnu\&logoColor=white)
 ![Built With Love](https://img.shields.io/badge/built%20with-%E2%9D%A4%20by%20DeuZa-red?style=plastic)
 
-# chkpwd
-
 ![chkpwd screenshot](img/chkpwd.png)
+
+# chkpwd
 
 ## 1. Project Purpose
 
