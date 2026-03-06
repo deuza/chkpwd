@@ -11,6 +11,8 @@
 
 # chkpwd
 
+![chkpwd screenshot](img/chkpwd.png)
+
 ## 1. Project Purpose
 
 This project is a PHP-based web tool designed for administrators and security-conscious users to:
