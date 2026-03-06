@@ -1,9 +1,13 @@
 ![GitHub release](https://img.shields.io/github/v/release/deuza/chkpwd?label=release&style=plastic)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/t/deuza/chkpwd)
 [![GitHub last commit](https://img.shields.io/github/last-commit/DeuZa/chkpwd?style=plastic)](https://github.com/DeuZa/chkpwd/commits/main)
+![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/deuza/chkpwd)
 [![License: CC0](https://img.shields.io/badge/license-CC0_1.0-lightgrey.svg?style=plastic)](https://creativecommons.org/publicdomain/zero/1.0/)
+[![License: WTFPL](https://img.shields.io/badge/license-WTFPL_2.0-lightgrey.svg?style=plastic)](https://www.wtfpl.net/)
+
+[![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/DeuZa42?style=social)](https://x.com/DeuZa42)
 ![Hack The Planet](https://img.shields.io/badge/hack-the--planet-black?style=flat-square\&logo=gnu\&logoColor=white)
-![Built With Love](https://img.shields.io/badge/built%20with-%E2%9D%A4%20by%20DeuZa-red?style=plastic)  
+![Built With Love](https://img.shields.io/badge/built%20with-%E2%9D%A4%20by%20DeuZa-red?style=plastic)
 
 # chkpwd
 
